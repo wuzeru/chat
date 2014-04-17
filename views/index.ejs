@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charest="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--<script src="/socket.io/socket.io.js"></script>-->
+    <link rel="stylesheet" href="stylesheets/bootstrap.css">
+    <link href="stylesheets/signin.css" rel="stylesheet">
+    <script type="text/javascript" src="javascripts/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="javascripts/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+    <form class="form-signin" role="form" id="login" action="/login" method="post">
+        <fieldset>
+            <h2 class="form-signin-heading">Please login in</h2>
+            <input type="text" class="form-control" placeholder="Username" name="username" required autofocus >
+            <input type="password" class="form-control" placeholder="Password" name="password" required>
+            <label class="checkbox">
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+            <% if (locals.error) { %>
+            <div><%= locals.error %> </div>
+            <% } %>
+            <% if(locals.success) {%>
+            <div><%= locals.success %> </div>
+            <% } %>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            </br>
+            <div>
+                <div class="btn-link" id="changeReg" >Click to register!</div></div>
+        </fieldset>
+    </form>
+    <form class="form-signin" role="form" id="reg" action="/reg" method="post">
+        <fieldset>
+            <h2 class="form-signin-heading">Welcome  Register</h2>
+            <input type="text" class="form-control" placeholder="Username" name="username" required autofocus>
+            <input type="password" class="form-control" placeholder="Password" name="password" required>
+            <input type="password" class="form-control" placeholder="Repassword" name="repassword" required>
+            </br>
+            <% if (locals.error) { %>
+            <div><%= locals.error %> </div>
+            <% } %>
+            <% if(locals.success) {%>
+            <div><%= locals.success %> </div>
+            <% } %>
+            <button class="btn btn-lg btn-success btn-block " type="submit">Register</button>
+            </br>
+            <input class="btn-link" id="changeLog" value="Back to login!"/>
+        </fieldset>
+    </form>
+</div>
+<script>
+    $("#reg").hide();
+    $("#changeReg").on("click",function(){
+        $("#login").hide();
+        $("#reg").show();
+    });
+    $("#changeLog").on("click",function(){
+        $("#login").show();
+        $("#reg").hide();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<%- include header.ejs%>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div style="display: none" id="talkShow">
+            <div class="panel panel-default" style="height:300px">
+                <div class="panel-heading" >
+                    <h3 class="panel-title" id="nameShow"></h3>
+                </div>
+                <div class="panel-body" id="talkcon">
+                    聊天内容
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="input-group">
+                    <textarea type="text" class="form-control" style="height: 55px" id="talk"></textarea>
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" style="height: 55px" id="talkSend">发送</button>
+                    </span>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="col-md-4" style="position: static">
+            <div class="panel panel-default" style="height: 355px">
+                <div class="panel-heading">
+                    <h3 class="panel-title">我的好友</h3>
+                </div>
+                <div class="panel-body" id="friendList">
+                    <%lists.forEach(function(list,index){%>
+                        <p class="">
+                            <span class="fl1"><%= list%></span>
+                            <span class="fl2"><span  class='icon icon-mid'><span class='icon-comment-text'></span></span></span>
+                            <span class="fl3"></span>
+                        </p>
+                    <%})%>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var talkNews = {};
+    var name = "<%= username%>";
+    var to ;
+    var talkNum = 0;
+    //接收用户上线通知
+    socket.on('online',function(data){
+        var name = data.name;
+
+        $('.fl1').each(function(index){
+            //if(data.users.indexOf($(this).text()) != -1)
+            if(data.users.indexOf($(this).text()) != -1){
+                $(this).next().show();
+            }
+        });
+    });
+    //接收用户下线通知
+    socket.on('offline',function(data){
+        $('.fl1').each(function(){
+            if($(this).text() === data.name){
+                $(this).next().hide();
+            }
+        })
+    });
+    //发送消息
+    $("#talkSend").on('click',function(){
+        if(!talkNews.from){
+            talkNews.from = to;
+        }
+        socket.emit("selfTalk",
+                {from:name,
+                    to:talkNews.from,
+                    talk:$("#talk").val()},
+                function(info){
+                    if(info == 'ok'){
+                        $("#talkcon").append("<p style='text-align: right'>"+$("#talk").val()+"</p>");
+                        $("#talk").val("");
+                    }
+                })
+
+    });
+    //接收消息
+    socket.on('selfTalk',function(data){
+        talkNews.from = data.from;
+        if ($("#talkShow").css("display") == 'none') {
+            talkNum++;
+            $('.fl1').each(function () {
+                if ($(this).text() === data.from) {
+                    $(this).next().next().text(talkNum);
+                }
+            });
+        };
+        $("#talkcon").append("<p>"+data.talk+"</p>");
+    })
+    $('.fl2').on('click',function(){
+        to = $(this).prev().text();
+        $("#nameShow").text(to);
+        $("#talkShow").show();
+    });
+    $('.fl3').on('click',function(){
+        $("#nameShow").text(talkNews.from);
+        $(this).text("");
+        talkNum = 0;
+        $('#talkShow').show();
+    })
+</script>
+<%- include footer.ejs%>
