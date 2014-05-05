@@ -3,36 +3,37 @@
     <div class="row">
         <div class="col-md-8">
             <div style="display: none" id="talkShow">
-            <div class="panel panel-default" style="height:300px">
-                <div class="panel-heading" >
-                    <h3 class="panel-title" id="nameShow"></h3>
+                <div class='panel panel-default' style='height:300px'>
+                    <span><button type='button' class='close' aria-hidden='true' id='closeTalkShow'>&times;</button></span>
+                    <div class='panel-heading'>
+                        <h3 class='panel-title' id='nameShow'></h3>
+                    </div>
+                    <div class='panel-body' id='talkcon' style='height:250px;'>
+                    </div>
                 </div>
-                <div class="panel-body" id="talkcon">
-                    聊天内容
+                <div class='panel panel-default'>
+                    <div class='input-group'>
+                        <textarea type='text' class='form-control' style='height: 55px' id='talk' onkeydown="send(event)" autofocus></textarea>
+                            <span class='input-group-btn'>
+                <button class='btn btn-default' type='button' style='height: 55px' id='talkSend' onclick='talkSend()'>发送</button>
+                </span>
+                    </div>
                 </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="input-group">
-                    <textarea type="text" class="form-control" style="height: 55px" id="talk"></textarea>
-                    <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" style="height: 55px" id="talkSend">发送</button>
-                    </span>
-                </div>
-            </div>
             </div>
         </div>
         <div class="col-md-4" style="position: static">
             <div class="panel panel-default" style="height: 355px">
                 <div class="panel-heading">
                     <h3 class="panel-title">我的好友</h3>
+
                 </div>
                 <div class="panel-body" id="friendList">
-                    <%lists.forEach(function(list,index){%>
-                        <p class="">
-                            <span class="fl1"><%= list%></span>
-                            <span class="fl2"><span  class='icon icon-mid'><span class='icon-comment-text'></span></span></span>
-                            <span class="fl3"></span>
-                        </p>
+                    <%user.friends.forEach(function(list,index){%>
+                    <p class="" id="fl_<%= list%>">
+                        <span class="fl1" ><%= list%></span>
+                        <span class="fl2"><span  class='icon icon-mid'><span class='icon-comment-text'></span></span></span>
+                        <span class="fl3"></span>
+                    </p>
                     <%})%>
                 </div>
             </div>
@@ -41,15 +42,43 @@
 </div>
 <script>
     var talkNews = {};
-    var name = "<%= username%>";
-    var to ;
+    var name = "<%= user.username%>";
+    var to;
     var talkNum = 0;
+    var chatNum = 0;
+    var count = 0;
+    var chatRecord = [];
+    var chatR = {from:String,talk:[]};
+
+
+    //打开聊天框
+    $(".fl2").on('click',function(){
+        to = $(this).prev().text();
+        if($("#nameShow").text() != to){
+            $("#talkcon").text("");
+        }
+        $("#nameShow").text(to);
+        if($("#fl_"+to+" .fl3").text() != ""){
+            $("#fl_"+to+" .fl3").text("");
+        }
+        if(chatRecord.length !=0){
+            for(var i = 0;i<chatRecord.length;i++){
+                if(chatRecord[i].from === to){
+                    chatRecord[i].talk.forEach(function(t){
+                        receiveNews(t);
+                    })
+                    //chatRecord[i].talk=[];
+                    break;
+                }
+            }
+        }
+        $("#talkShow").show();
+    });
+
     //接收用户上线通知
     socket.on('online',function(data){
-        var name = data.name;
-
+        //显示用户上线
         $('.fl1').each(function(index){
-            //if(data.users.indexOf($(this).text()) != -1)
             if(data.users.indexOf($(this).text()) != -1){
                 $(this).next().show();
             }
@@ -64,45 +93,113 @@
         })
     });
     //发送消息
-    $("#talkSend").on('click',function(){
+    function talkSend(){
         if(!talkNews.from){
             talkNews.from = to;
         }
+        var date = new Date();
+        var dateShow = date.getFullYear()+"/"+date.getMonth()+ "/"+date.getDate()+" "+date.getHours() +":"+date.getMinutes()+":"+date.getSeconds();
         socket.emit("selfTalk",
                 {from:name,
                     to:talkNews.from,
-                    talk:$("#talk").val()},
+                    talk:$("#talk").val(),
+                    date:dateShow},
                 function(info){
                     if(info == 'ok'){
-                        $("#talkcon").append("<p style='text-align: right'>"+$("#talk").val()+"</p>");
+                        sendNews($("#talk").val());
                         $("#talk").val("");
                     }
                 })
 
-    });
+    };
     //接收消息
     socket.on('selfTalk',function(data){
         talkNews.from = data.from;
-        if ($("#talkShow").css("display") == 'none') {
-            talkNum++;
-            $('.fl1').each(function () {
-                if ($(this).text() === data.from) {
-                    $(this).next().next().text(talkNum);
+
+        //显示未读消息
+        if ($("#talkShow").css("display") == 'none'||$("#nameShow" != data.from)) {
+            if(chatRecord.length === 0){
+                chatR.from = data.from;
+                chatR.talk[0] = data.talk;
+                chatRecord.push(chatR);
+                $("#fl_"+data.from+" .fl3").text(chatRecord[0].talk.length);
+            }else{
+                var p = FromInChatRecord(chatRecord,data.from);
+                if (p < 0) {
+                    var talk = [];
+                    talk[0] = data.talk;
+                    var length = chatRecord.push({from: data.from, talk: talk});
+                    $("#fl_" + data.from + " .fl3").text(chatRecord[length - 1].talk.length);
+
+                }else{
+                    chatRecord[p].talk.push(data.talk);
+                    $("#fl_"+data.from+" .fl3").text(chatRecord[p].talk.length);
                 }
-            });
-        };
-        $("#talkcon").append("<p>"+data.talk+"</p>");
-    })
-    $('.fl2').on('click',function(){
-        to = $(this).prev().text();
-        $("#nameShow").text(to);
-        $("#talkShow").show();
+            }
+        }else{                     //直接显示消息
+            receiveNews(data.talk);
+        }
+
     });
-    $('.fl3').on('click',function(){
-        $("#nameShow").text(talkNews.from);
-        $(this).text("");
-        talkNum = 0;
-        $('#talkShow').show();
-    })
+    //判断聊天记录中是否存在记录,返回数组下标
+    function FromInChatRecord(chatRecord,from){
+        for(var i = 0;i<chatRecord.length;i++){
+            if(chatRecord[i].from == from){
+                return i;
+                break;
+            }
+        }
+        return -1;
+    }
+    //回车键发送
+    function send(event){
+        //IE
+        if(event.keyCode == 13){
+            $("#talkSend").click();
+        }
+        //Netscape/Firefox/Opera
+        if(event.which == 13){
+            $("#talksend").click();
+        }
+    };
+    //关闭聊天框
+    $('#closeTalkShow').on('click',function(){
+        $("#talkcon").text("");
+        $("#talkShow").hide();
+    });
+    //添加好友
+    $("#addFriend").on("click",function(){
+        $.get('addFriend',{fname:$("#friendname").val()},function(data){
+            if (data.isok == "ok") {
+                alert("添加成功");
+                showFriend(data.name);
+                $("#modalClose").click();
+            }else{
+                alert("该用户已经是你的好友");
+            }
+        });
+    });
+    //显示好友
+    function showFriend(name) {
+        $("#friendList").append('<p>' +
+                '<span class="fl1">' + name + '</span>' +
+                '<span class="fl2"><span  class="icon icon-mid"><span class="icon-comment-text"></span></span></span>' +
+                '<span class="fl3"></span>' +
+                '</p>'
+        )
+    }
+    //格式化发送消息
+    function sendNews(talk){
+        var r = "<div class='talkArea'><div class='send'><div class='arrow'></div>"+talk+"</div></div>";
+        $("#talkcon").append(r);
+    };
+    //格式化消息接受
+    function receiveNews(talk){
+        var r = "<div class='talkArea'><div class='receive'><div class='arrow'></div>"+talk+"</div></div>";
+        $("#talkcon").append(r);
+    };
+
+
 </script>
+
 <%- include footer.ejs%>

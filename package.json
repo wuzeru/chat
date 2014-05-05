@@ -11,6 +11,10 @@
     "mongoose":"*",
     "express-mongoose":"*",
     "crypto":"*",
-    "socket.io":"*"
+    "socket.io":"*",
+    "connect-flash":"*",
+    "gm":"*",
+    "node-images":"*",
+    "request":"*"
   }
 }

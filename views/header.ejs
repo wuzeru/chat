@@ -44,6 +44,11 @@
                     </ul>
                 </li>
                 <li style="display: none"  id="friendInfo"><span class="icon icon-mid"><span class="icon-mail"></span></span></li>
+                <% if(user){%>
+                    <li><a href="/personInfo"><%= user.username%></a></li>
+                    <li><a href="/logout">Logout</a></li>
+                <%}%>
+                <li id="toAgreeFriend" style="display:none"><a href="#" ><span class="icon icon-mid" data-toggle="modal" data-target="#info"><span class="icon-mail"></span></span></a></li>
             </ul>
             <!--todo搜索框 -->
             <form class="navbar-form navbar-right" >
@@ -68,7 +73,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">关闭</button>
-                <button type="button" class="btn btn-primary" id="addFriend">加为好友</button>
+                <button type="button" class="btn btn-primary" id="toAddFriend">申请好友</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -86,7 +91,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClosei">关闭</button>
-                <button type="button" class="btn btn-primary" id="addFriendi">同意</button>
+                <button type="button" class="btn btn-primary" id="agreeFriend">同意</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -103,20 +108,53 @@
             }
         })
     });
-    $("#addFriend").on("click",function(){
-        $.get('addFriend',{fname:$("#friendname").val()},function(data){
-            if (data == "ok") {
-                alert("添加成功");
+    $("#toAddFriend").on('click',function(){
+        var data = {
+            from:'<%= user.username%>',
+            to:$("#friendname").val()
+        }
+        socket.emit('agreeFriend',data,function(fn){
+            if(fn == 'ok'){
                 $("#modalClose").click();
-            }else{
-                alert("该用户已经是你的好友");
-            };
+            }
         });
     });
+
+    //好友验证
+    var from ;
+    socket.on('agreeFriend', function (data) {
+        from = data.from;
+        $("#toAgreeFriend").show();
+        $("#infoShow").append(data.from);
+    });
+    //同意验证
+    $("#agreeFriend").on('click', function () {
+        $.get('agreeFriend',{fname:from}, function (data) {
+            if (data == 'ok') {
+                alert('用户添加成功');
+            }
+            $("#modalClosei").click();
+            $("#toAgreeFriend").hide();
+            showFriend(from);
+        });
+    });
+    //显示好友
+    function showFriend(name) {
+        $("#friendList").append('<p>' +
+                '<span class="fl1">' + name + '</span>' +
+                '<span class="fl2"><span  class="icon icon-mid"><span class="icon-comment-text"></span></span></span>' +
+                '<span class="fl3"></span>' +
+                '</p>'
+        )
+    }
+
+
+
 </script>
-<% if(username){%>
+<% if(user){%>
 <script>
     //如果登陆，发送信息
-    socket.emit('online',{user:"<%= username%>"});
+    socket.emit('online',{name:"<%= user.username%>"});
 </script>
 <% }%>
+

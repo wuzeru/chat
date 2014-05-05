@@ -1,0 +1,103 @@
+<%- include header%>
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+
+            <div class="panel panel-primary">
+                <div class="panel-heading ">
+                    <h3 class="panel-title">个人基本信息</h3>
+                </div>
+                <div class="panel-body">
+                    <form   action="/InfoUpdate" method="post" enctype="multipart/form-data" >
+                        <fieldset>
+
+                            <div class="row">
+                                <div class="col-xs-7">
+                                    <div class="row">
+                                        <div class="form-group col-xs-3">
+                                            <label for="sex">Sex</label>
+                                            <select class="form-control" name="sex">
+                                                <option class="form-control" value="female">女</option>
+                                                <option class="form-control" value="male">男</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-xs-3">
+                                            <label for="Age">Age</label>
+                                            <input type="text" class="form-control" id="Age" name="age" placeholder="<%= user.age%>" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-xs-9">
+                                            <label for="Email">Email</label>
+                                            <input type="text" class="form-control" id="Email" name="email" placeholder="<%= user.email%>" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-xs-9">
+                                            <label for="Sign">Sign</label>
+                                            <textarea type="text" class="form-control" id="Sign" name="sign" rows="3" placeholder="<%= user.sign%>"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn  btn-primary " type="submit" id="update">修改</button>
+                                    <button class="btn btn-default" type="reset">清除</button>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div class="form-group col-xs-3 ">
+                                        <img src="./images/<%= user.imgUrl%>" alt="" />
+                                        <input type="file"  id="imgUpload" name="thumbnail" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">密码修改</h3>
+                </div>
+                <div class="panel-body">
+                    <form id="psdChange" action="/psdChange" method="post">
+                        <fieldset>
+                            <div class="row">
+                                <div class="form-group col-xs-3">
+                                    <label for="oldPsd">原密码</label>
+                                    <input type="password" class="form-control" id="oldPsd" name="oldPsd">
+                                </div>
+                                <div class="form-group col-xs-3">
+                                    <label for="newPsd">新密码</label>
+                                    <input type="password" class="form-control" id="newPsd" name="newPsd">
+                                </div>
+                                <div class="form-group col-xs-3">
+                                    <label for="psdConfirm">密码确认</label>
+                                    <input type="password" class="form-control" id="psdConfirm" name="psdConfirm" onchange="confirm()">
+                                </div>
+                            </div>
+                            <div id="msg" style="display: none">重复密码错误</div>
+                            <input type="submit" class="btn btn-primary" value="修改密码" id="psdChangeOk"/>
+                            <input type="reset" class="btn btn-default" value="重置"/>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function confirm(){
+        if($("#newPsd").val() != $("#psdConfirm").val()){
+            $("#psdChangeOk").attr('disabled','disabled');
+            $("#msg").show();
+
+        }else{
+            $("#msg").hide();
+            $("#psdChangeOk").removeAttr('disabled');
+        }
+    };
+</script>
+<%- include footer%>

@@ -13,7 +13,32 @@
     <script type="text/javascript" src="javascripts/jquery-1.8.0.min.js"></script>
     <script type="text/javascript" src="javascripts/bootstrap.min.js"></script>
 </head>
+<style type="text/css">
+    body {
+        background:#4D4948;
+    }
+    .send {
+        position:relative;
+        width:20px;
+        height:35px;
+        background:#F8C301;
+        border-radius:5px; /* 圆角 */
+        margin:30px auto 0;
+    }
+
+    .send .arrow {
+        position:absolute;
+        top:5px;
+        right:-16px; /* 圆角的位置需要细心调试哦 */
+        width:0;
+        height:0;
+        font-size:0;
+        border:solid 8px;
+        border-color:#4D4948 #4D4948 #4D4948 #F8C301;
+    }</style>
 <body>
+    <div class="send">
+    <div class="arrow">al;</div>zxcv</div>
     <div id="a" >
         <p>hello</p>
     </div>
@@ -26,7 +51,11 @@
     <button id="click4">click4</button>
     <span class="icon icon-mid"><span class="icon-mail"></span></span>
     <p><span id="f1">hi.<span id="f2" style="display: none">hello</span></span></p>
+    <p id="time"></p>
     <script>
+        var date = new Date();
+        var dateShow = date.getFullYear()+"/"+date.getMonth()+ "/"+date.getDate()+" "+date.getHours() +":"+date.getMinutes()+":"+date.getSeconds();
+        $("#time").text(dateShow);
         $("#click1").on("click",function(){
             $.get("search",{fname:"lswuqiongru"},function(data){
                 if(data != 'null'){

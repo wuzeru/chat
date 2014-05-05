@@ -10,3 +10,51 @@ a {
     display: none;
     cursor:pointer;
 }
+.talkArea{
+    height: 40px;
+    width: 700px;
+    margin-left: 10px;
+}
+.talkArea .send {
+    position:relative;
+    float: right;
+    width: auto;
+    height:35px;
+    background:#F8C301;
+    border-radius:5px; /* 圆角 */
+    margin:0;
+    padding: 5px;
+}
+
+.talkArea .send .arrow {
+    position:absolute;
+    top:5px;
+    right:-16px; /* 圆角的位置需要细心调试哦 */
+    width:0;
+    height:0;
+    font-size:0;
+    border:solid 8px;
+    border-color:#ffffff #ffffff #ffffff #F8C301;
+}
+.talkArea .receive {
+    position:relative;
+    float: left;
+    min-width: 20px;
+    height:35px;
+    background:#F0F0F0;
+    border-radius:5px; /* 圆角 */
+    margin:0;
+    padding-top: 10px;
+    padding-left: 5px;
+}
+
+.talkArea .receive .arrow {
+    position:absolute;
+    top:5px;
+    left:-16px; /* 圆角的位置需要细心调试哦 */
+    width:0;
+    height:0;
+    font-size:0;
+    border:solid 8px;
+    border-color:#ffffff #f0f0f0 #ffffff #ffffff;
+}
