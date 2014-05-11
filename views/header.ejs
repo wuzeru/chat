@@ -14,7 +14,7 @@
     <script type="text/javascript" src="javascripts/jquery-1.8.0.min.js"></script>
     <script type="text/javascript" src="javascripts/bootstrap.min.js"></script>
 </head>
-<body>
+<body >
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -29,8 +29,8 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#about" id="groupTalk">群聊</a></li>
+                <li id="establishGroup"><a href="#" data-toggle="modal" data-target="#group">建立新群</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -43,7 +43,7 @@
                         <li><a href="#">One more separated link</a></li>
                     </ul>
                 </li>
-                <li style="display: none"  id="friendInfo"><span class="icon icon-mid"><span class="icon-mail"></span></span></li>
+
                 <% if(user){%>
                     <li><a href="/personInfo"><%= user.username%></a></li>
                     <li><a href="/logout">Logout</a></li>
@@ -96,9 +96,36 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<!--建群操作 -->
+<div class="modal fade" id="group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">建群操作</h4>
+            </div>
+            <from class="form-horizontal" role="form">
+            <div class="modal-body " id="groupInfo">
+                <div class="form-group">
+
+                    <div class="col-xs-7">
+                    <label for="groupName">群名：</label>
+                    <input type="text" class="form-control input-group-lg col-sm-3" id="groupName" placeholder="Enter GroupName">
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">关闭</button>
+                <button type="submit" class="btn btn-primary" id="groupConfirm">确定</button>
+            </div>
+            </from>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <script>
     var socket = io.connect();
-
+    var username = '<%= user.username%>';
     $("#search").on("click",function(){
         $.get("search",{fname: $("#friendname").val()},function(data){
             if(data != 'null'){
@@ -110,12 +137,13 @@
     });
     $("#toAddFriend").on('click',function(){
         var data = {
-            from:'<%= user.username%>',
+            from:username,
             to:$("#friendname").val()
         }
         socket.emit('agreeFriend',data,function(fn){
             if(fn == 'ok'){
                 $("#modalClose").click();
+                showFriend(data.to);
             }
         });
     });
@@ -147,7 +175,17 @@
                 '</p>'
         )
     }
-
+    //建立新群
+    $('#groupConfirm').on('click',function(){
+        $.post('groupEstablish',{name:$("#groupName").val()},function(info){
+            if(info == 'success'){
+                alert('成功建群！');
+                $('#modalClose').click();
+            }else{
+                alert('该群已存在！');
+            }
+        })
+    })
 
 
 </script>

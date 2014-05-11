@@ -58,5 +58,31 @@ module.exports = function(io){
                 }
             });
         });
+        //判断好友是否在线
+        socket.on('isFriendOnline',function(data,fn){
+            if(users.indexOf(data.fname) != -1){
+                fn("yes");
+            }else{
+                fn("no");
+            }
+        })
     });
+    var groupTalk = io.of('/groupTalk').on('connection',function(socket){
+        socket.on('add',function(data){
+            socket.group= {
+                name:data.group,
+                user:data.user
+            }
+        });
+        socket.on('groupTalk',function(data,fn){
+            fn("ok");
+            groupTalk.clients().forEach(function(client){
+                if(client.group){
+                    if(client.group.name == data.group){
+                        client.emit('groupTalk',data);
+                    }
+                }
+            })
+        })
+    })
 }

@@ -1,5 +1,6 @@
 var db  = require("../model/db");
 var User = require('../model/user');
+var Group = require('../model/group');
 //var Users = require('../model/models');
 var crypto = require("crypto");
 var fs = require("fs");
@@ -199,6 +200,29 @@ module.exports = function(app){
     app.post('/getRecord',function(req,res){
         res.send(record);
     });
+
+    //群操作
+    //新建群
+    app.post('/groupEstablish',function(req,res){
+        var group = {
+            name:req.body.name,
+            leader:req.session.user.username,
+            member:[req.session.user.username]
+        }
+        Group.establish(group,function(err,result){
+            if(err) throw err;
+            if(result){   //返回值不为空，建群成功
+                res.send('success');
+            }else{        //返回值为空，建群失败
+                res.send('failed');
+            }
+        })
+    });
+    //添加成员
+    app.post('/addGroupMember',function(req,res){});
+    //踢出成员
+    app.post('/removeGroupMember',function(req,res){});
+
     //测试
     app.get("/test",function(req,res){
         res.render("test",{user:req.session.user});

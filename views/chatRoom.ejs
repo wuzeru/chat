@@ -29,17 +29,36 @@
                 </div>
                 <div class="panel-body" id="friendList">
                     <%user.friends.forEach(function(list,index){%>
-                    <p class="" id="fl_<%= list%>">
-                        <span class="fl1" ><%= list%></span>
+                    <p class="" id="fl_<%= list%>" >
+                        <span class="fl1"  ><%= list%></span>
                         <span class="fl2"><span  class='icon icon-mid'><span class='icon-comment-text'></span></span></span>
                         <span class="fl3"></span>
                     </p>
+                    <script>
+                        function isFriendOn(){
+                            $(".fl1").each(function(){
+                                var fname = $(this).text();
+                                alert(fname);
+                                socket.emit("isFriendOnline",{fname:fname},function(data){
+                                    alert("yes0");
+                                    if(data == "yes"){
+                                        alert("yes1")
+                                        $(this).next().show();
+                                        alert("当前用户："+$(this).text());
+                                    }
+                                })
+                            })
+                        }
+                        //isFriendOn();
+                    </script>
                     <%})%>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <script>
     var talkNews = {};
     var name = "<%= user.username%>";
@@ -49,7 +68,10 @@
     var count = 0;
     var chatRecord = [];
     var chatR = {from:String,talk:[]};
+    var _isGroup = 0 ;//判断是否群聊
 
+    //创建群聊socket
+    var groupTalk = io.connect('/groupTalk');
 
     //打开聊天框
     $(".fl2").on('click',function(){
@@ -65,7 +87,7 @@
             for(var i = 0;i<chatRecord.length;i++){
                 if(chatRecord[i].from === to){
                     chatRecord[i].talk.forEach(function(t){
-                        receiveNews(t);
+                        receiveNews(chatRecord[i].from,t);
                     })
                     //chatRecord[i].talk=[];
                     break;
@@ -82,8 +104,32 @@
             if(data.users.indexOf($(this).text()) != -1){
                 $(this).next().show();
             }
+/*            if(data.username == $(this).text()){
+                $(this).next().show();
+            }*/
         });
     });
+    //判断用户好友是否在线，是就显示聊天按钮
+    function isFriendOn(){
+        alert("you le");
+        $(".fl1").each(function(){
+            var fname = $(this).text();
+            socket.emit("isFriendOnline",{fname:fname},function(data){
+                if(data == "yes"){
+                    $(this).next().show();
+                }
+            })
+        })
+    }
+    $(".fl2").load(function(){
+        alert("jiazai");
+        var fname = $(this).prev().text();
+        socket.emit("isFriendOnline",{fname:fname},function(data){
+            if(data == "yes"){
+                $(this).show();
+            }
+        })
+    })
     //接收用户下线通知
     socket.on('offline',function(data){
         $('.fl1').each(function(){
@@ -94,30 +140,48 @@
     });
     //发送消息
     function talkSend(){
-        if(!talkNews.from){
-            talkNews.from = to;
+        if (_isGroup == 0) {
+            if (!talkNews.from) {
+                talkNews.from = to;
+            }
+            var date = new Date();
+            var dateShow = date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+            socket.emit("selfTalk",
+                    {from: name,
+                        to: talkNews.from,
+                        talk: $("#talk").val(),
+                        date: dateShow},
+                    function (info) {
+                        if (info == 'ok') {
+                            sendNews($("#talk").val());
+                            $("#talk").val("");
+                        }
+                    })
+        }else{
+            groupTalk.emit("groupTalk",{
+                group:'group',
+                from:name,
+                talk:$('#talk').val()
+            },function(info){
+                if (info == "ok") {
+                    sendNews($('#talk').val());
+                    $('#talk').val('');
+                }
+            })
         }
-        var date = new Date();
-        var dateShow = date.getFullYear()+"/"+date.getMonth()+ "/"+date.getDate()+" "+date.getHours() +":"+date.getMinutes()+":"+date.getSeconds();
-        socket.emit("selfTalk",
-                {from:name,
-                    to:talkNews.from,
-                    talk:$("#talk").val(),
-                    date:dateShow},
-                function(info){
-                    if(info == 'ok'){
-                        sendNews($("#talk").val());
-                        $("#talk").val("");
-                    }
-                })
-
     };
+    //接受群聊消息
+    groupTalk.on('groupTalk',function(data){
+        if (data.from != name) {
+            receiveNews(data.from,data.talk);
+        }
+    })
     //接收消息
     socket.on('selfTalk',function(data){
         talkNews.from = data.from;
 
         //显示未读消息
-        if ($("#talkShow").css("display") == 'none'||$("#nameShow" != data.from)) {
+        if ($("#talkShow").css("display") == 'none'||$("#nameShow").text() != data.from) {
             if(chatRecord.length === 0){
                 chatR.from = data.from;
                 chatR.talk[0] = data.talk;
@@ -137,7 +201,7 @@
                 }
             }
         }else{                     //直接显示消息
-            receiveNews(data.talk);
+            receiveNews(data.from , data.talk);
         }
 
     });
@@ -166,6 +230,9 @@
     $('#closeTalkShow').on('click',function(){
         $("#talkcon").text("");
         $("#talkShow").hide();
+        if(_isGroup == 1){
+            _isGroup = 0;
+        }
     });
     //添加好友
     $("#addFriend").on("click",function(){
@@ -194,11 +261,22 @@
         $("#talkcon").append(r);
     };
     //格式化消息接受
-    function receiveNews(talk){
-        var r = "<div class='talkArea'><div class='receive'><div class='arrow'></div>"+talk+"</div></div>";
+    function receiveNews(from,talk){
+        var r ="<table><tr><td>"+from+"</td><td><div><span class='talkArea' ><span class='receive'><span class='arrow'></span>"+talk+"</span></span></div></td></tr></table>"
         $("#talkcon").append(r);
     };
 
+
+    //打开群聊窗口，进入群聊
+    $("#groupTalk").on('click',function(){
+        groupTalk.emit('add',{
+            group:'group',
+            from:name
+        });
+        _isGroup = 1 ;
+        $("#talkShow").show();
+        $("#nameShow").text('Group');
+    })
 
 </script>
 

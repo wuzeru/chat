@@ -46,11 +46,10 @@
                                 </div>
                                 <div class="col-xs-2">
                                     <div class="form-group col-xs-3 ">
-                                        <img src="./images/<%= user.imgUrl%>" alt="" />
-                                        <input type="file"  id="imgUpload" name="thumbnail" />
+                                        <img src="./images/<%= user.imgUrl%>" alt="" id="imgShow"/>
+                                        <input type="file"  id="imgUpload" name="thumbnail" onchange="picPreShow()" />
                                     </div>
                                 </div>
-
                             </div>
                         </fieldset>
                     </form>
@@ -99,5 +98,9 @@
             $("#psdChangeOk").removeAttr('disabled');
         }
     };
+    function picPreShow(){
+
+    }
+
 </script>
 <%- include footer%>

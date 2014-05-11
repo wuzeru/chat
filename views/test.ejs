@@ -52,7 +52,29 @@
     <span class="icon icon-mid"><span class="icon-mail"></span></span>
     <p><span id="f1">hi.<span id="f2" style="display: none">hello</span></span></p>
     <p id="time"></p>
-    <script>
+    <script language='javascript'>
+        function getFullPath(obj) {
+            if (obj) {
+                //ie
+                if (window.navigator.userAgent.indexOf("MSIE") >= 1) {
+                    obj.select();
+                    return document.selection.createRange().text;
+                }
+                //firefox
+                else if (window.navigator.userAgent.indexOf("Firefox") >= 1) {
+                    if (obj.files) {
+                        return obj.files.item(0).getAsDataURL();
+                    }
+                    return obj.value;
+                }
+                return obj.value;
+            }
+        }
+    </script>
+
+    <input type="file" onchange="document.getElementById('img').src=getFullPath(this);alert(getFullPath(this))"/>
+    <img id="img"/>
+<script>
         var date = new Date();
         var dateShow = date.getFullYear()+"/"+date.getMonth()+ "/"+date.getDate()+" "+date.getHours() +":"+date.getMinutes()+":"+date.getSeconds();
         $("#time").text(dateShow);
@@ -79,4 +101,5 @@
             $(this).show();
         })
     </script>
+
 <%- include footer%>

@@ -23,19 +23,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="chatRoom.ejs" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/views/chatRoom.ejs">
+      <file leaf-file-name="index.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/routes/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="191" column="28" selection-start="6480" selection-end="6480" vertical-scroll-proportion="0.83231705" vertical-offset="2592" max-vertical-offset="3150">
+            <state line="218" column="10" selection-start="6610" selection-end="6610" vertical-scroll-proportion="0.8869347" vertical-offset="2917" max-vertical-offset="3540">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="socket.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/socket.js">
+      <file leaf-file-name="group.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/model/group.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="71" selection-start="417" selection-end="417" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="1005">
+            <state line="19" column="1" selection-start="462" selection-end="462" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="1320">
               <folding />
             </state>
           </provider>
@@ -44,7 +44,27 @@
       <file leaf-file-name="index.ejs" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/index.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="109" selection-start="1092" selection-end="1101" vertical-scroll-proportion="0.0" vertical-offset="128" max-vertical-offset="1155">
+            <state line="62" column="25" selection-start="2770" selection-end="2770" vertical-scroll-proportion="-15.0" vertical-offset="570" max-vertical-offset="1155">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="header.ejs" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/header.ejs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="182" column="41" selection-start="8024" selection-end="8024" vertical-scroll-proportion="-6.9166665" vertical-offset="2564" max-vertical-offset="3060">
+              <folding>
+                <element signature="n#style#0;n#li#6;n#ul#0;n#div#1;n#div#0;n#div#0;n#body#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="personInfo.ejs" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/personInfo.ejs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="25" column="71" selection-start="1293" selection-end="1301" vertical-scroll-proportion="-8.125" vertical-offset="180" max-vertical-offset="1680">
               <folding />
             </state>
           </provider>
@@ -64,18 +84,19 @@
         <option value="$PROJECT_DIR$/public/stylesheets/cikonss.css" />
         <option value="$PROJECT_DIR$/settings.js" />
         <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/views/personInfo.ejs" />
-        <option value="$PROJECT_DIR$/views/header.ejs" />
         <option value="$PROJECT_DIR$/views/index.ejs" />
         <option value="$PROJECT_DIR$/model/userChatRecord.js" />
         <option value="$PROJECT_DIR$/model/user.js" />
-        <option value="$PROJECT_DIR$/model/models.js" />
-        <option value="$PROJECT_DIR$/model/socket.js" />
-        <option value="$PROJECT_DIR$/routes/index.js" />
         <option value="$PROJECT_DIR$/views/test.ejs" />
-        <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
+        <option value="$PROJECT_DIR$/views/personInfo.ejs" />
         <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/model/socket.js" />
+        <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
         <option value="$PROJECT_DIR$/views/chatRoom.ejs" />
+        <option value="$PROJECT_DIR$/model/models.js" />
+        <option value="$PROJECT_DIR$/views/header.ejs" />
+        <option value="$PROJECT_DIR$/model/group.js" />
+        <option value="$PROJECT_DIR$/routes/index.js" />
       </list>
     </option>
   </component>
@@ -295,10 +316,10 @@
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33049405" sideWeight="0.49959645" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.274276" sideWeight="0.49959645" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24939467" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24939467" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39863715" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33049405" sideWeight="0.5004035" order="8" side_tool="true" content_ui="tabs" />
@@ -335,11 +356,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/model/models.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="17" selection-start="307" selection-end="307" vertical-scroll-proportion="0.0" vertical-offset="55" max-vertical-offset="420" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/model/db.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="3" column="58" selection-start="124" selection-end="124" vertical-scroll-proportion="0.0" vertical-offset="45" max-vertical-offset="135" />
@@ -535,65 +551,86 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/header.ejs">
+    <entry file="file://$PROJECT_DIR$/views/test.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="160" column="0" selection-start="6673" selection-end="6673" vertical-scroll-proportion="2.6006098" vertical-offset="1547" max-vertical-offset="2490" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/models.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="17" selection-start="251" selection-end="251" vertical-scroll-proportion="0.53424656" vertical-offset="0" max-vertical-offset="365" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/user.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="99" column="13" selection-start="2799" selection-end="2799" vertical-scroll-proportion="0.44602272" vertical-offset="1328" max-vertical-offset="1680" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="200" column="7" selection-start="6083" selection-end="6083" vertical-scroll-proportion="0.5068493" vertical-offset="2815" max-vertical-offset="3180" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/stylesheets/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="16" selection-start="558" selection-end="558" vertical-scroll-proportion="0.9041096" vertical-offset="180" max-vertical-offset="975">
-          <folding />
-        </state>
+        <state line="74" column="32" selection-start="2401" selection-end="2401" vertical-scroll-proportion="0.67987806" vertical-offset="887" max-vertical-offset="1650" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="22" selection-start="1396" selection-end="1396" vertical-scroll-proportion="0.0" vertical-offset="505" max-vertical-offset="915" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/personInfo.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="46" selection-start="1559" selection-end="1559" vertical-scroll-proportion="1.2804878" vertical-offset="0" max-vertical-offset="1635" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/test.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="19" selection-start="827" selection-end="827" vertical-scroll-proportion="0.3140244" vertical-offset="212" max-vertical-offset="1305" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="109" selection-start="1092" selection-end="1101" vertical-scroll-proportion="0.0" vertical-offset="128" max-vertical-offset="1155">
+        <state line="55" column="0" selection-start="1397" selection-end="1397" vertical-scroll-proportion="0.7587131" vertical-offset="542" max-vertical-offset="915">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/socket.js">
+    <entry file="file://$PROJECT_DIR$/public/stylesheets/style.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="71" selection-start="417" selection-end="417" vertical-scroll-proportion="0.0" vertical-offset="640" max-vertical-offset="1005">
+        <state line="61" column="0" selection-start="1083" selection-end="1083" vertical-scroll-proportion="0.7587131" vertical-offset="632" max-vertical-offset="1005">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/chatRoom.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="191" column="28" selection-start="6480" selection-end="6480" vertical-scroll-proportion="0.83231705" vertical-offset="2592" max-vertical-offset="3150">
+        <state line="240" column="30" selection-start="8282" selection-end="8282" vertical-scroll-proportion="-1.1428572" vertical-offset="3984" max-vertical-offset="4320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/user.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="30" selection-start="719" selection-end="719" vertical-scroll-proportion="-0.5416667" vertical-offset="660" max-vertical-offset="1680">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/models.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="47" selection-start="457" selection-end="457" vertical-scroll-proportion="0.7989276" vertical-offset="92" max-vertical-offset="480">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/socket.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="59" selection-start="627" selection-end="627" vertical-scroll-proportion="0.4155496" vertical-offset="100" max-vertical-offset="1395">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/personInfo.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="71" selection-start="1293" selection-end="1301" vertical-scroll-proportion="-8.125" vertical-offset="180" max-vertical-offset="1680">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/header.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="182" column="41" selection-start="8024" selection-end="8024" vertical-scroll-proportion="-6.9166665" vertical-offset="2564" max-vertical-offset="3060">
+          <folding>
+            <element signature="n#style#0;n#li#6;n#ul#0;n#div#1;n#div#0;n#div#0;n#body#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="62" column="25" selection-start="2770" selection-end="2770" vertical-scroll-proportion="-15.0" vertical-offset="570" max-vertical-offset="1155">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/group.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="1" selection-start="462" selection-end="462" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="218" column="10" selection-start="6610" selection-end="6610" vertical-scroll-proportion="0.8869347" vertical-offset="2917" max-vertical-offset="3540">
           <folding />
         </state>
       </provider>

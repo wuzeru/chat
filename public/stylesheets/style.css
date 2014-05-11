@@ -39,6 +39,7 @@ a {
 .talkArea .receive {
     position:relative;
     float: left;
+    left:16px;
     min-width: 20px;
     height:35px;
     background:#F0F0F0;
