@@ -1,23 +1,28 @@
-/*body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.friendList{
+    display: block ! important;
+    margin-left: 20px;
+    margin-right: 20px;
 }
-
-a {
-  color: #00B7FF;
-}*/
 .fl2{
     display: none;
+    cursor:pointer;
+}
+.agree{
+    cursor:pointer;
+}
+.disagree{
     cursor:pointer;
 }
 .talkArea{
     height: 40px;
     width: 700px;
     margin-left: 10px;
+    margin-bottom: 20px;
 }
 .talkArea .send {
-    position:relative;
+    position:absolute;
     float: right;
+    right:50px;
     width: auto;
     height:35px;
     background:#F8C301;
@@ -26,6 +31,22 @@ a {
     padding: 5px;
 }
 
+.talkArea .sendUser{
+    position: absolute;
+    float: right;
+    right:20px;
+    width:20px;
+    height: 20px;
+    padding: 5px;
+}
+.talkArea .sendDate{
+    position: absolute;
+    float: right;
+    right:-40px;
+    width: 200px;
+    height: 35px;
+
+}
 .talkArea .send .arrow {
     position:absolute;
     top:5px;
@@ -37,18 +58,31 @@ a {
     border-color:#ffffff #ffffff #ffffff #F8C301;
 }
 .talkArea .receive {
-    position:relative;
+    position:absolute;
     float: left;
-    left:16px;
+    left:50px;
     min-width: 20px;
     height:35px;
     background:#F0F0F0;
     border-radius:5px; /* 圆角 */
     margin:0;
-    padding-top: 10px;
     padding-left: 5px;
 }
+.talkArea .receiveUser{
+    position: absolute;
+    float: left;
+    left:20px;
+    height: 20px;
+    width: 20px;
+}
+.talkArea.receiveDate{
+    position: absolute;
+    float: left;
+    left:20px;
+    width:200px;
+    height: 35px;
 
+}
 .talkArea .receive .arrow {
     position:absolute;
     top:5px;

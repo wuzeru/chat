@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 //Define Schema
-//用户模型
+//用户
 var _User = new Schema({
     username:String,
     password:String,
@@ -12,13 +12,28 @@ var _User = new Schema({
     email:String,
     sign:String,
     friends:[],
-    imgUrl:String
+    imgUrl:String,
+    groups:[],
+    messages:[],
+    records:[{
+        to:String,
+        record:[{
+            name:String,
+            date:String,
+            talk:String
+        }]
+    }]
 });
-//群模型
+//群
 var _Group = new Schema({
     name:String,
     leader:String,
-    member:[]
+    member:[],
+    records:[{
+        name:String,
+        date:String,
+        talk:String
+    }]
 })
 
 

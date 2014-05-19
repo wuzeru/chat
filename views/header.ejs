@@ -13,10 +13,12 @@
     <link rel="stylesheet" href="stylesheets/cikonss.css" />
     <script type="text/javascript" src="javascripts/jquery-1.8.0.min.js"></script>
     <script type="text/javascript" src="javascripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="javascripts/chat.js"></script>
 </head>
 <body >
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
+        <div class="row">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -29,14 +31,10 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about" id="groupTalk">群聊</a></li>
-                <li id="establishGroup"><a href="#" data-toggle="modal" data-target="#group">建立新群</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">群管理 <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
+                        <li id="establishGroup"><a href="#group" data-toggle="modal" data-target="#group">建立新群</a></li>
                         <li class="divider"></li>
                         <li class="dropdown-header">Nav header</li>
                         <li><a href="#">Separated link</a></li>
@@ -48,16 +46,28 @@
                     <li><a href="/personInfo"><%= user.username%></a></li>
                     <li><a href="/logout">Logout</a></li>
                 <%}%>
-                <li id="toAgreeFriend" style="display:none"><a href="#" ><span class="icon icon-mid" data-toggle="modal" data-target="#info"><span class="icon-mail"></span></span></a></li>
+                <li id="msgShow" style="display:none"><a href="#info" data-toggle="modal" ><span class="glyphicon glyphicon-envelope"></span></a></li>
             </ul>
-            <!--todo搜索框 -->
-            <form class="navbar-form navbar-right" >
-                <div class="form-group">
-                    <input type="text" placeholder="搜索好友" class="form-control" id="friendname" name="fname">
-                </div>
-                <button type="submit" class="btn btn-success"  id="search" data-toggle="modal" data-target="#searchshow">Search</button>
+            <!--搜索框 -->
+            <form class="navbar-form">
+                    <div class="col-lg-3 col-lg-offset-4">
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="searchSwitch">搜好友<span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="searchF">搜好友</a></li>
+                                    <li><a href="#" id="searchG">搜群</a></li>
+                                </ul>
+                            </div><!-- /btn-group -->
+                            <input type="text" placeholder="搜索好友" class="form-control" id="friendname" name="fname">
+                        </div><!-- /input-group -->
+                    </div><!-- /.col-lg-6 -->
+                    <button type="submit" class="btn btn-success" id="search" data-toggle="modal" data-target="#searchshow">
+                        Search
+                    </button>
             </form>
         </div><!--/.nav-collapse -->
+        </div>
     </div>
 </div>
 <!-- 好友搜素 -->
@@ -66,133 +76,108 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">好友搜索</h4>
+                <h4 class="modal-title">搜索</h4>
             </div>
             <div class="modal-body" id="friendshow">
                 <!--<p>One fine body&hellip;</p>-->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">关闭</button>
-                <button type="button" class="btn btn-primary" id="toAddFriend">申请好友</button>
+                <button type="button" class="btn btn-primary" id="toAddFriend">申请</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<!--系统消息 -->
-<div class="modal fade" id="info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">系统消息</h4>
-            </div>
-            <div class="modal-body" id="infoShow">
-                <!--<p>One fine body&hellip;</p>-->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClosei">关闭</button>
-                <button type="button" class="btn btn-primary" id="agreeFriend">同意</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<!--建群操作 -->
+<!--群管理 -->
 <div class="modal fade" id="group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">建群操作</h4>
+                <h4 class="modal-title">群管理</h4>
             </div>
-            <from class="form-horizontal" role="form">
-            <div class="modal-body " id="groupInfo">
-                <div class="form-group">
+            <div class="form-horizontal" role="form">
+                <div class="modal-body " id="groupInfo">
+                    <div class="form-group">
 
-                    <div class="col-xs-7">
-                    <label for="groupName">群名：</label>
-                    <input type="text" class="form-control input-group-lg col-sm-3" id="groupName" placeholder="Enter GroupName">
+                        <div class="col-xs-7">
+                            <label for="groupName">群名：</label>
+                            <input type="text" class="form-control input-group-lg col-sm-3" id="groupName" placeholder="Enter GroupName">
+                        </div>
+
                     </div>
-
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="modalCloseG">关闭</button>
+                    <button type="submit" class="btn btn-primary" id="groupConfirm">确定</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">关闭</button>
-                <button type="submit" class="btn btn-primary" id="groupConfirm">确定</button>
-            </div>
-            </from>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<!--系统消息 -->
+<div class="modal fade" id="info" tabindex="-1" role="dialog"  aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-labelledby="myModalLabel" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">系统消息</h4>
+            </div>
+            <div class="modal-body" id="infoShow">
+                <!--<p>One fine body&hellip;</p>-->
+                <div id="friend">
+                <% user.messages.forEach(function(message, index){ %>
+                 <%if(message.type == "friendApply"){%>
+
+                 <p id="msg_<%= message.from%>">
+                    <span><%= message.from %></span><span>&nbsp;请求加你为好友</span>&nbsp;
+                    <span class="agree"><i class="glyphicon glyphicon-ok"></i></span>&nbsp;
+                    <span class="disagree"><i class="glyphicon glyphicon-remove"></i></span>
+                 </p>
+                 <%}})%>
+                 </div>
+                 <div id="group">
+                 <% user.messages.forEach(function(message, index){ %>
+                 <%if(message.type == "groupApply"){%>
+                 <p id="msg_group_<%= message.from%>">
+                    <span><%= message.from %></span>
+                     <span>&nbsp;请求加入</span>
+                     <span><%= message.gname%></span>&nbsp;
+                    <span class="agree"><i class="glyphicon glyphicon-ok"></i></span>&nbsp;
+                    <span class="disagree"><i class="glyphicon glyphicon-remove"></i></span>
+                 </p>
+                 <% }}) %>
+                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClosei">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script>
-    var socket = io.connect();
-    var username = '<%= user.username%>';
-    $("#search").on("click",function(){
-        $.get("search",{fname: $("#friendname").val()},function(data){
-            if(data != 'null'){
-                $("#friendshow").text(data.username);
-            }else{
-                $("#friendshow").text("该用户不存在");
-            }
-        })
+    username = '<%= user.username%>';
+    userMessage = '<%= user.messages%>';
+    userGroups = '<%= user.groups%>';
+
+    $("#searchF").click(function(){
+        $("#searchSwitch").text("搜好友");
     });
-    $("#toAddFriend").on('click',function(){
-        var data = {
-            from:username,
-            to:$("#friendname").val()
-        }
-        socket.emit('agreeFriend',data,function(fn){
-            if(fn == 'ok'){
-                $("#modalClose").click();
-                showFriend(data.to);
-            }
-        });
+    $("#searchG").click(function(){
+        $("#searchSwitch").text("搜群");
     });
 
-    //好友验证
-    var from ;
-    socket.on('agreeFriend', function (data) {
-        from = data.from;
-        $("#toAgreeFriend").show();
-        $("#infoShow").append(data.from);
-    });
-    //同意验证
-    $("#agreeFriend").on('click', function () {
-        $.get('agreeFriend',{fname:from}, function (data) {
-            if (data == 'ok') {
-                alert('用户添加成功');
-            }
-            $("#modalClosei").click();
-            $("#toAgreeFriend").hide();
-            showFriend(from);
-        });
-    });
-    //显示好友
-    function showFriend(name) {
-        $("#friendList").append('<p>' +
-                '<span class="fl1">' + name + '</span>' +
-                '<span class="fl2"><span  class="icon icon-mid"><span class="icon-comment-text"></span></span></span>' +
-                '<span class="fl3"></span>' +
-                '</p>'
-        )
+    if(userMessage.length > 0){
+        $("#msgShow").show();
     }
-    //建立新群
-    $('#groupConfirm').on('click',function(){
-        $.post('groupEstablish',{name:$("#groupName").val()},function(info){
-            if(info == 'success'){
-                alert('成功建群！');
-                $('#modalClose').click();
-            }else{
-                alert('该群已存在！');
-            }
-        })
-    })
-
 
 </script>
 <% if(user){%>
 <script>
     //如果登陆，发送信息
     socket.emit('online',{name:"<%= user.username%>"});
+    groupTalk.emit('online',{name:username,groups:userGroups});
 </script>
 <% }%>
 

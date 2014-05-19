@@ -81,3 +81,11 @@ Group.removeMember = function(memberName,groupName,callback){
         }
     })
 };
+Group.saveRecord = function(groupName,talkRecord,callback){
+    Group.get(groupName,function(err,group){
+        if(err) throw err;
+        if(group){
+
+        }
+    })
+}

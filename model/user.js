@@ -10,12 +10,15 @@ User.reg = function(user,callback){
     var newuser = new Users({
         username:user.username,
         password:user.password,
-        friends:user.friends,
+        friends:[],
         sex:"女",
         age:18,
         email:"暂无",
         sign:"暂无",
-        imgUrl:"1.jpg"
+        imgUrl:"1.jpg",
+        groups:[],
+        messages:[],
+        records:[]
     });
     newuser.save(function(err,doc){
         if(err) throw err;
@@ -28,7 +31,7 @@ User.get = function(name,callback){
         if(err){
             return callback(err);
         };
-        if(result){
+        if(result != null){
             var user = result;
             return callback(err,user);//查询成功，返回user
         }else{
@@ -36,17 +39,17 @@ User.get = function(name,callback){
         }
     });
 }
+//删除好友信息
+User.remove = function(){};
 
 //添加用户好友
 User.add = function(name,friendname,callback){
     Users.update({username:name},{$push:{"friends":friendname}},{safe:true},function(err,num){
-
         if(err){
             console.log(err);
             throw err;
-        };
-
-            return callback(err,num);//更新成功
+        }
+        return callback(err,num);//更新成功
     });
 }
 User.updateInfo = function(name,Info,callback){

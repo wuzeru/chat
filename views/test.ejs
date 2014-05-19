@@ -1,105 +1,29 @@
 <!DOCTYPE html>
+<html>
 <head>
-    <meta charest="UTF-8">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <script src="/socket.io/socket.io.js"></script>
-    <link rel="stylesheet" href="stylesheets/bootstrap.css">
-    <link href="stylesheets/navbar-fixed-top.css" rel="stylesheet">
-    <link rel="stylesheet" href="stylesheets/cikonss.css" />
     <script type="text/javascript" src="javascripts/jquery-1.8.0.min.js"></script>
-    <script type="text/javascript" src="javascripts/bootstrap.min.js"></script>
 </head>
-<style type="text/css">
-    body {
-        background:#4D4948;
-    }
-    .send {
-        position:relative;
-        width:20px;
-        height:35px;
-        background:#F8C301;
-        border-radius:5px; /* 圆角 */
-        margin:30px auto 0;
-    }
-
-    .send .arrow {
-        position:absolute;
-        top:5px;
-        right:-16px; /* 圆角的位置需要细心调试哦 */
-        width:0;
-        height:0;
-        font-size:0;
-        border:solid 8px;
-        border-color:#4D4948 #4D4948 #4D4948 #F8C301;
-    }</style>
 <body>
-    <div class="send">
-    <div class="arrow">al;</div>zxcv</div>
-    <div id="a" >
-        <p>hello</p>
-    </div>
-    <div id="b">
-        <p>hi</p>
-    </div>
-    <button id="click1">click1</button>
-    <button id="click2">click2</button>
-    <button id="click3">click3</button>
-    <button id="click4">click4</button>
-    <span class="icon icon-mid"><span class="icon-mail"></span></span>
-    <p><span id="f1">hi.<span id="f2" style="display: none">hello</span></span></p>
-    <p id="time"></p>
-    <script language='javascript'>
-        function getFullPath(obj) {
-            if (obj) {
-                //ie
-                if (window.navigator.userAgent.indexOf("MSIE") >= 1) {
-                    obj.select();
-                    return document.selection.createRange().text;
-                }
-                //firefox
-                else if (window.navigator.userAgent.indexOf("Firefox") >= 1) {
-                    if (obj.files) {
-                        return obj.files.item(0).getAsDataURL();
-                    }
-                    return obj.value;
-                }
-                return obj.value;
-            }
-        }
-    </script>
-
-    <input type="file" onchange="document.getElementById('img').src=getFullPath(this);alert(getFullPath(this))"/>
-    <img id="img"/>
+    <button id="bt1">click1</button>
+    <button id="bt2">clickW</button>
+    <button id="bt3">clickR</button>
+</body>
 <script>
-        var date = new Date();
-        var dateShow = date.getFullYear()+"/"+date.getMonth()+ "/"+date.getDate()+" "+date.getHours() +":"+date.getMinutes()+":"+date.getSeconds();
-        $("#time").text(dateShow);
-        $("#click1").on("click",function(){
-            $.get("search",{fname:"lswuqiongru"},function(data){
-                if(data != 'null'){
-                    $("#a").text(data.username);
-                }else{
-                    $("#a").text("nobody");
-                }
-            })
-            $("#b").text("lswuqiongru");
+    $("#bt1").click(function(){
+        $.post('test1',{name:"1"},function(data){
+            alert('ok');
         })
-        $("#click2").on('click',function(){
-            var a = "click1"
-            var p = a;
-            $("#"+p).click();
+    });
+    $('#bt2').click(function(){
+        $.post('testw',{name:"1"},function(data){
+            alert('ok');
         })
-        $("#click3").on('click',function(){
-            var p = $('#b').text();
-            $('#b').text(p+"asdfadfa");
+    });
+    $("#bt3").click(function(){
+        alert("you");
+        $.get('testr',function(data){
+            alert(data);
         })
-        $("#click4").on('click',function(){
-            $(this).show();
-        })
-    </script>
-
-<%- include footer%>
+    });
+</script>
+</html>

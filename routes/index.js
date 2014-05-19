@@ -1,7 +1,6 @@
 var db  = require("../model/db");
 var User = require('../model/user');
 var Group = require('../model/group');
-//var Users = require('../model/models');
 var crypto = require("crypto");
 var fs = require("fs");
 
@@ -10,11 +9,16 @@ var imageMagick = gm.subClass({ imageMagick : true });
 
 var images = require("node-images");
 module.exports = function(app){
-    var record ;//聊天记录缓存
+
     //首页
     app.get("/",function(req,res){
         res.render("index");
     });
+/**
++------------------------------------------------------------------------------
+* 用户操作
++------------------------------------------------------------------------------
+*/
     //注册功能
     app.post("/reg",function(req,res){
         var name = req.body.username,
@@ -23,23 +27,20 @@ module.exports = function(app){
         User.get(name,function(err,user){
             if(user){
                 err = '用户名存在';
-                req.flash('error','用户名存在');
             }
             if(err){
                 console.log(err);
                 return res.redirect('/');
             }
-            var friends = [];
 
             var user = {
                 username:name,
-                password:password,
-                friends:friends
+                password:password
             };
             User.reg(user,function(err,user){
                 if(err){
                     console.log(err);
-                }else{
+                } else {
                     req.session.user = user;
                     res.redirect('/chatRoom');
                 }
@@ -59,23 +60,36 @@ module.exports = function(app){
             if(user){
 
                 if(user.password != password){
-                    req.flash('error','密码不正确');
-                    res.redirect('/');
+                    res.send("passwordWrong");
                 }else{
-                    console.log("已成功");
                     req.session.user = user;
                     res.redirect('/chatRoom');
-                };
+                }
 
             }else{
-                req.flash('error','用户名存在');
                 res.redirect('/');
             }
         })
     });
+    //展示用户头像
+    app.get('/userImgShow',function(req,res){
+        User.get(req.query.username,function(err,doc){
+            if(err) res.send("/1.jpg");
+            if(doc == null) {
+                res.send("/1.jpg");
+            }
+            else {
+                if(doc.imgUrl != '1.jpg'){
+                    res.send(doc.imgUrl);
+                }else{
+                    res.send("/1.jpg");
+                }
+            }
+        });
+    });
+    //进入界面
     app.get("/chatRoom",function(req,res){
         if (req.session.user) {
-
             res.render('chatRoom', {user: req.session.user});
         } else {
             res.redirect("/");
@@ -88,7 +102,6 @@ module.exports = function(app){
 
        User.get(name,function(err,user){
            if(user){
-               //console.log(user.username);
                res.send(user);
 
            }else{
@@ -96,21 +109,109 @@ module.exports = function(app){
            }
        });
     });
-    //添加好友
-    app.get('/agreeFriend',function(req,res){
-        var fname = req.query.fname;
-        var name = req.session.user.username;
-        User.add(name,fname,function(err,num){
-            if(num != 0){
-                User.add(fname,name,function(err,num){
-                    if(num != 0){
-                        res.send('ok');
-                    }
-                });
+
+    //群搜素
+    app.get("/searchGroup",function(req,res){
+        var gname = req.query.gname;
+        Group.get(gname,function(err,group){
+            if(group){
+                res.send(group);
+            }else {
+                res.send('null');
             }
-        });
+        })
     });
-    // 个人信息页面
+
+    //保存聊天记录
+    app.post('/recordAppend', function (req, res) {
+        var name = req.body.name;//用户名字
+        var fname = req.body.fname;//好友名字
+        var records = req.body.records;//聊天记录
+        //console.log(records);
+
+        User.get(name, function (err, user) {
+
+            //找到该好友在用户聊天记录中的位置，不存在返回－1
+            var index = function(){
+                for(var i=0 ;i<user.records.length;i++){
+                    if(user.records[i].to == fname){
+                        return i;
+                    }
+                }
+                return -1;
+            }
+
+            //该用户还没有保存过与该好友的聊天记录
+            if (index() === -1) {
+                //新建一个records对象
+                var p = {
+                    to: fname,
+                    record: records
+                }
+                //保存进records
+                user.records.push(p);
+
+            } else { //该用户已经保存过与该好友的聊天记录
+                //判断是否是之前保存过的记录，将没保存过的保存进该用户对该好友聊天记录的record中
+                records.forEach(function (records) {
+                   //找到该条记录的时间在用户聊天记录中的位置，没有返回－1
+                    var isDateStored = function(){
+                        for(var i = 0;i<user.records[index()].record.length;i++){
+                            if(user.records[index()].record[i].date === records.date){
+                                return i;
+                            }
+                        }
+                        return -1;
+                    }
+                    //如果还没有保存过，保存进聊天记录
+                    if (isDateStored() < 0) {
+                        user.records[index()].record.push(records);
+                    }
+                })
+            }
+            user.save(function (err) {
+                if (err) throw err;
+                res.send('ok');
+            })
+        })
+    });
+    //读取聊天记录
+    app.post('/getRecord',function(req,res){
+        var name = req.body.name;
+        var fname = req.body.fname;
+
+        User.get(name,function(err,user){
+            //如果用户的聊天记录为空，没有和任何好友聊天，返回null
+            if(user.records.length === 0 ){
+                res.send('null');
+            }else{
+                function isFnameinRecords(fname,records){
+                    for(var i=0;i<records.length;i++){
+                        //如果与该好友聊天过，返回聊天记录
+                        if(records[i].to === fname){
+                            return i;
+                        }
+                    }
+                    return -1;
+                }
+                var p = isFnameinRecords(fname,user.records);
+                if(p == -1){
+                    //如果没有与该好友聊天过，返回null
+                    res.send('null');
+                }else{
+                    res.send(user.records[p].record);
+                }
+            }
+        })
+    });
+
+
+/**
++------------------------------------------------------------------------------
+* 个人页面
++------------------------------------------------------------------------------
+*/
+    // 进入个人信息页面
     app.get('/personInfo',function(req,res){
         var name = req.session.user.username;
         res.render('personInfo',{user:req.session.user});
@@ -166,66 +267,78 @@ module.exports = function(app){
             }
         });
     });
-    //展示用户头像
-    app.get('/userImgShow',function(req,res){
-        User.get(req.query.username,function(err,doc){
-            if(doc.imgUrl != '1.jpg'){
-            res.send(doc.imgUrl);
-            }else{
-                res.send("/1.jpg");
-            }
-        });
-    });
-    //保存用户聊天记录
-    app.post('/saveChatRecord',function(req,res){
-        var chatRecord = {};
-        chatRecord.to = req.body.to;
-        chatRecord.record = req.body.record;
-        console.log(chatRecord.to);
-        console.log(chatRecord.record);
-        User.saveRecord(req.session.user.username,chatRecord,function(err,doc,num){
-            if(num){
-                res.send('ok');
-            }else{
-                res.send('null');
-            }
-        });
-    });
-    //读取用户聊天记录
-    app.post('/stroeRecord',function(req,res){
-        record = req.body.record;
-        res.send("ok");
-    });
-    //获取用户聊天记录
-    app.post('/getRecord',function(req,res){
-        res.send(record);
-    });
 
-    //群操作
+
+/**
++------------------------------------------------------------------------------
+* 群操作
++------------------------------------------------------------------------------
+*/
     //新建群
     app.post('/groupEstablish',function(req,res){
         var group = {
             name:req.body.name,
-            leader:req.session.user.username,
-            member:[req.session.user.username]
-        }
+            leader:req.body.leader,
+            member:[req.body.leader]
+        };
         Group.establish(group,function(err,result){
             if(err) throw err;
             if(result){   //返回值不为空，建群成功
-                res.send('success');
+               User.get(group.leader,function(err,doc){
+                   if(err) throw err;
+                   doc.groups.unshift(group.name);
+                   doc.save(function(err){
+                      if(err) throw err;
+                   });
+                   res.send("ok");
+                })
             }else{        //返回值为空，建群失败
                 res.send('failed');
             }
+        });
+    });
+
+    //保存群聊天记录
+    app.post('/appendGroupRecord', function (req, res) {
+        var gname = req.body.gname;//群名字
+        var records = req.body.records;//聊天记录
+
+        Group.get(gname, function (err, group) {
+            records.forEach(function(records){
+                //判断是否存在该聊天记录
+                var isDateStored = function(){
+                    for(var i = 0;i<group.records.length;i++){
+                        if(group.records[i].date === records.date){
+                            return i;
+                        }
+                    }
+                    return -1;
+                };
+                //如果不存在
+                if(isDateStored() == -1){
+                    group.records.push(records);
+                }
+            });
+
+            group.save(function (err) {
+                if (err) throw err;
+                res.send('ok');
+            })
         })
     });
-    //添加成员
-    app.post('/addGroupMember',function(req,res){});
-    //踢出成员
-    app.post('/removeGroupMember',function(req,res){});
+    //获取群聊天记录
+    app.post('/getGroupRecord',function(req,res){
+        var gname = req.body.gname;
 
-    //测试
-    app.get("/test",function(req,res){
-        res.render("test",{user:req.session.user});
+        Group.get(gname,function(err,user){
+            //如果该群的聊天记录为空，返回null
+            if(user.records.length === 0 ){
+                res.send('null');
+            }else{
+                res.send(user.records);
+            }
+        })
     });
+
 
 }
